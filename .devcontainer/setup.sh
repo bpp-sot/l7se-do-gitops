@@ -35,8 +35,8 @@ echo "   metrics-server enabled"
 # Install Argo CD onto the cluster
 echo ""
 echo "[4/4] Installing Argo CD onto the cluster..."
-kubectl create namespace argocd
-kubectl apply -n argocd \
+kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
+kubectl apply --server-side -n argocd \
   -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 echo ""
