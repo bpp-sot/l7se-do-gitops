@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitops-demo-dev
+  namespace: argocd
+spec:
+  project: default
+
+  # Source: this repo is the single source of truth
+  source:
+    # Exercise 3: replace this URL with your fork's URL
+    repoURL: https://github.com/bpp-sot/l7se-devops-gitops.git
+    targetRevision: HEAD
+    path: k8s/overlays/dev
+
+  # Destination: deploy into the gitops-app namespace on the local cluster
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gitops-app
+
+  # Sync policy: automatic reconciliation, with pruning and self-healing
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

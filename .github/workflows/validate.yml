@@ -1,0 +1,48 @@
+name: Validate Kubernetes Manifests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'k8s/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'k8s/**'
+
+jobs:
+  validate:
+    name: Validate manifests with Kustomize
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'latest'
+
+      - name: Validate base manifests
+        run: |
+          echo "=== Validating base manifests ==="
+          kubectl kustomize k8s/base
+
+      - name: Validate dev overlay
+        run: |
+          echo "=== Validating dev overlay ==="
+          kubectl kustomize k8s/overlays/dev
+
+      - name: Validate staging overlay
+        run: |
+          echo "=== Validating staging overlay ==="
+          kubectl kustomize k8s/overlays/staging
+
+      - name: Check manifest diff (on PR)
+        if: github.event_name == 'pull_request'
+        run: |
+          echo "=== Manifest diff (base vs dev) ==="
+          diff \
+            <(kubectl kustomize k8s/base) \
+            <(kubectl kustomize k8s/overlays/dev) || true

@@ -1,0 +1,45 @@
+{
+  "name": "L7SE DevOps – GitOps with Argo CD",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "moby": true
+    },
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+      "version": "latest",
+      "helm": "latest",
+      "minikube": "latest"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "redhat.vscode-yaml",
+        "GitHub.vscode-pull-request-github"
+      ],
+      "settings": {
+        "vs-kubernetes": {
+          "vs-kubernetes.kubectl-path.linux": "/usr/local/bin/kubectl"
+        }
+      }
+    }
+  },
+  "forwardPorts": [8080, 8443, 3000],
+  "portsAttributes": {
+    "8080": {
+      "label": "Argo CD UI",
+      "onAutoForward": "notify"
+    },
+    "3000": {
+      "label": "App",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "remoteUser": "vscode"
+}
