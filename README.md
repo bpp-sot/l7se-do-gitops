@@ -111,24 +111,24 @@ Work through the exercises in order — each builds on the previous:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                   GitHub Codespace                       │
-│                                                          │
+│                   GitHub Codespace                      │
+│                                                         │
 │   ┌──────────────────────────────────────────────────┐  │
-│   │              Minikube cluster                     │  │
-│   │                                                   │  │
-│   │  ┌─────────────────┐   ┌─────────────────────┐  │  │
-│   │  │  argocd ns       │   │  gitops-app ns       │  │  │
-│   │  │                 │   │                     │  │  │
-│   │  │  argocd-server  │──▶│  gitops-demo-app    │  │  │
-│   │  │  repo-server    │   │  (your app)         │  │  │
-│   │  │  app-controller │   └─────────────────────┘  │  │
+│   │              Minikube cluster                    │  │
+│   │                                                  │  │
+│   │  ┌─────────────────┐   ┌─────────────────────┐   │  │
+│   │  │  argocd ns      │   │  gitops-app ns      │   │  │
+│   │  │                 │   │                     │   │  │
+│   │  │  argocd-server  │──▶│  gitops-demo-app    │   │  │
+│   │  │  repo-server    │   │  (your app)         │   │  │
+│   │  │  app-controller │   └─────────────────────┘   │  │
 │   │  └────────┬────────┘                             │  │
-│   │           │ watches                               │  │
-│   └───────────┼───────────────────────────────────────┘  │
-│               │                                          │
-│               ▼                                          │
+│   │           │ watches                              │  │
+│   └───────────┼──────────────────────────────────────┘  │
+│               │                                         │
+│               ▼                                         │
 │   ┌───────────────────────┐                             │
-│   │  This Git repository   │ ← single source of truth  │
+│   │  This Git repository  │ ← single source of truth    │
 │   │  k8s/overlays/dev/    │                             │
 │   └───────────────────────┘                             │
 └─────────────────────────────────────────────────────────┘
