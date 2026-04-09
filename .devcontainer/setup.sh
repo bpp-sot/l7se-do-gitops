@@ -5,13 +5,18 @@ echo "============================================"
 echo " L7SE DevOps – GitOps Lab Setup"
 echo "============================================"
 
+# Argo CD v2.13.x is pinned deliberately.
+# Argo CD v3.x introduced a 'copyutil' init container that crash-loops
+# in Docker-in-Docker environments (Minikube inside GitHub Codespaces).
+# v2.13 is the latest stable v2 release and does not have this issue.
+ARGOCD_VERSION="v2.13.4"
+
 # Install Argo CD CLI
 echo ""
-echo "[1/4] Installing Argo CD CLI..."
-ARGOCD_VERSION=$(curl -s https://api.github.com/repos/argoproj/argo-cd/releases/latest | grep tag_name | cut -d '"' -f 4)
-sudo curl -sSL -o /usr/local/bin/argocd \
+echo "[1/4] Installing Argo CD CLI (${ARGOCD_VERSION})..."
+curl -sSL -o /usr/local/bin/argocd \
   "https://github.com/argoproj/argo-cd/releases/download/${ARGOCD_VERSION}/argocd-linux-amd64"
-sudo chmod +x /usr/local/bin/argocd
+chmod +x /usr/local/bin/argocd
 echo "   Argo CD CLI installed: $(argocd version --client --short 2>/dev/null || echo 'installed')"
 
 # Start Minikube
@@ -20,7 +25,7 @@ echo "[2/4] Starting Minikube (this takes 2-3 minutes)..."
 minikube start \
   --driver=docker \
   --cpus=2 \
-  --memory=3072 \
+  --memory=4096 \
   --kubernetes-version=stable \
   --wait=all \
   --no-vtx-check
@@ -35,13 +40,18 @@ echo "   metrics-server enabled"
 # Install Argo CD onto the cluster
 echo ""
 echo "[4/4] Installing Argo CD onto the cluster..."
-kubectl create namespace argocd --dry-run=client -o yaml | kubectl apply -f -
-kubectl apply --server-side -n argocd \
-  -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl create namespace argocd
+kubectl apply -n argocd \
+  -f "https://raw.githubusercontent.com/argoproj/argo-cd/${ARGOCD_VERSION}/manifests/install.yaml"
 
 echo ""
 echo "   Waiting for Argo CD pods to be ready (this takes 2-4 minutes)..."
+
+# Wait for repo-server first — it is the most likely to have issues
+# and argocd-server depends on it being healthy
 kubectl wait --for=condition=available --timeout=300s \
+  deployment/argocd-repo-server -n argocd
+kubectl wait --for=condition=available --timeout=120s \
   deployment/argocd-server -n argocd
 echo "   Argo CD is ready"
 
