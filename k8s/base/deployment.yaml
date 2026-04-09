@@ -17,7 +17,7 @@ spec:
       containers:
         - name: gitops-demo-app
           # Exercise 4: you will update this image tag to trigger a GitOps sync
-          image: ghcr.io/bpp-sot/l7se-devops-gitops-app:1.0.0
+          image: ghcr.io/bpp-sot/l7se-do-gitops-app:1.0.0
           ports:
             - containerPort: 3000
           env:
