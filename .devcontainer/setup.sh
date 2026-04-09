@@ -9,9 +9,9 @@ echo "============================================"
 echo ""
 echo "[1/4] Installing Argo CD CLI..."
 ARGOCD_VERSION=$(curl -s https://api.github.com/repos/argoproj/argo-cd/releases/latest | grep tag_name | cut -d '"' -f 4)
-curl -sSL -o /usr/local/bin/argocd \
+sudo curl -sSL -o /usr/local/bin/argocd \
   "https://github.com/argoproj/argo-cd/releases/download/${ARGOCD_VERSION}/argocd-linux-amd64"
-chmod +x /usr/local/bin/argocd
+sudo chmod +x /usr/local/bin/argocd
 echo "   Argo CD CLI installed: $(argocd version --client --short 2>/dev/null || echo 'installed')"
 
 # Start Minikube
