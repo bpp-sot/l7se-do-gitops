@@ -119,14 +119,14 @@ Work through the exercises in order — each builds on the previous:
 │   │  ┌─────────────────┐   ┌─────────────────────┐   │  │
 │   │  │  argocd ns      │   │  gitops-app ns      │   │  │
 │   │  │                 │   │                     │   │  │
-│   │  │  argocd-server  │──▶│  gitops-demo-app    │   │  │
+│   │  │  argocd-server  │──>│  gitops-demo-app    │   │  │
 │   │  │  repo-server    │   │  (your app)         │   │  │
 │   │  │  app-controller │   └─────────────────────┘   │  │
 │   │  └────────┬────────┘                             │  │
 │   │           │ watches                              │  │
 │   └───────────┼──────────────────────────────────────┘  │
 │               │                                         │
-│               ▼                                         │
+│               v                                         │
 │   ┌───────────────────────┐                             │
 │   │  This Git repository  │ ← single source of truth    │
 │   │  k8s/overlays/dev/    │                             │
