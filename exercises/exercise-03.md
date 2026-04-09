@@ -56,7 +56,7 @@ You can create an Application via the UI, CLI, or by applying a YAML manifest. W
 
 ```bash
 argocd app create gitops-demo-dev \
-  --repo https://github.com/bpp-sot/l7se-devops-gitops.git \
+  --repo https://github.com/bpp-sot/l7se-do-gitops.git \
   --path k8s/overlays/dev \
   --dest-server https://kubernetes.default.svc \
   --dest-namespace gitops-app \
